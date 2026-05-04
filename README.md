@@ -14,8 +14,8 @@
 - **Пошук тарифів** — перевірка умов тарифів на сайті оператора (trafilatura + DuckDuckGo)
 - **Ескалація** — надсилає email до служби підтримки або відділу продажів з транскриптом розмови
 - **Персистентність** — всі сесії, повідомлення та ескалації зберігаються у SQLite; при ескалації до листа автоматично додається транскрипція поточної розмови
-- **Багатомовність** — відповідає тією мовою, якою пише клієнт; якщо клієнт пише російською — відповідь виключно українською
-
+- **Багатомовність** — відповідає тією мовою, якою пише клієнт; якщо клієнт пише російською — відповідь виключно українською- **Чат-інтерфейс** — повноцінний Web UI (ук/ен/де), роздається FastAPI; меню з тестовими клієнтами + зворотний зв'язок
+- **Off-topic захист** — агент одразу відмовляється відповідати на питання не по темі Telekom
 ---
 
 ## Архітектура
@@ -53,16 +53,19 @@ agents/support_supervisor.py    support_graph.py
 | Стан розмови | `InMemorySaver` (губиться при exit) | `SqliteSaver` (зберігається між рестартами) |
 | Langfuse tracing | ✅ | ✅ |
 
-> **Мультиагентність** 
-> реалізована у FastAPI-режимі: 4 спеціалізовані агенти з LangGraph StateGraph + Router pattern. 
+> **Мультиагентність** реалізована у FastAPI-режимі: 5 спеціалізованих агентів з LangGraph StateGraph + Router pattern.
+
+```
 Запит клієнта
       │
-      ▼
- router.py          ← Агент 1: класифікує (product/general/critical)
       │
-      ├─ product  ──▶  docs_agent.py       ← Агент 2: RAG + Excel (search_customer, KB)
-      ├─ general  ──▶  websearch_agent.py  ← Агент 3: веб-пошук тарифів
-      └─ critical ──▶  escalation_agent.py ← Агент 4: email ескалація
+ router.py       ← Агент 1: класифікує (product / general / critical / off_topic)
+      │
+      ├─ product   ▶  docs_agent.py        ← Агент 2: RAG + Excel
+      ├─ general   ▶  websearch_agent.py   ← Агент 3: веб-пошук тарифів
+      ├─ critical  ▶  escalation_agent.py  ← Агент 4: email ескалація
+      └─ off_topic ▶  [вбудована відмова, без LLM] ← Агент 5: off-topic guard
+```
 
 > REPL-режим — single-agent для локального тестування.
 
@@ -231,6 +234,7 @@ python run_api.py
 | `/sessions/{id}/chat` | POST | Надіслати повідомлення |
 | `/sessions/{id}` | GET | Історія повідомлень |
 | `/sessions/{id}` | DELETE | Закрити сесію |
+| `/sessions/{id}/feedback` | POST | Зворотний зв'язок (зірки + коментар) |
 | `/health` | GET | Перевірка стану |
 
 > **Увага:** завжди запускати з папки `HT Lektion 12`. Якщо термінал відкрито в батьківській папці — спочатку `cd "HT Lektion 12"`.
@@ -243,7 +247,7 @@ python run_api.py
 
 ```
 ================================================================
-  Telekom Business Support — мультиагентна система
+  Telekom Support — мультиагентна система
   Session: support_session_...
   Введіть 'exit' або 'вийти' для завершення розмови
 ================================================================
@@ -310,6 +314,7 @@ python ingest.py
 | `messages` | Кожне повідомлення: роль (`user`/`assistant`), текст, час |
 | `identified_customers` | Ідентифікований клієнт: рахунок, ім'я, тариф, файл-джерело |
 | `escalations` | Ескалація: кому надіслано, тема, резюме, повний текст листа |
+| `feedbacks` | Зворотний зв'язок: оцінка 1–5 зірочок, коментар, ім'я користувача |
 
 Збереження відбувається автоматично — вручну нічого робити не потрібно.
 
@@ -421,3 +426,24 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8000/sessions/$($s.session_id)/chat" `
 | Excel | openpyxl |
 | Email | smtplib + MIME |
 | Config | pydantic-settings |
+| Rate Limiting | slowapi |
+| Observability | Langfuse |
+
+---
+
+## Безпека
+
+Система розроблена як навчальний демо-проєкт з реалізованими заходами через OWASP Top 10:
+
+| Захист | Реалізація |
+|---|---|
+| **Rate limiting** | `slowapi`: до 10 нових сесій/хв + 20 повідомлень/хв на IP |
+| **Input validation** | Pydantic `Field(max_length=4000)` на повідомленнях |
+| **Error masking** | 500-помилки повертають загальне повідомлення; деталі логуються на сервері |
+| **CORS** | Дозволені тільки localhost + ngrok домен (не `*`) |
+| **Security headers** | `X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`, `Referrer-Policy` |
+| **Session TTL** | Сесії автоматично закриваються через 4 години |
+| **Off-topic guard** | Router + вбудована відмова для нетелеком-запитів |
+| **Secrets** | Через `.env` + `pydantic.SecretStr`; `.gitignore` виключає `.env`, `*.db`, `data/customers/` |
+
+> Це навчальний демо-проєкт. Для продакшного розгортання додатково потрібні: JWT-авторизація, шифрування SQLite, Redis для сесій.
