@@ -1,0 +1,968 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\HF\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\HF\OneDrive\Iryna\ArchivData comp WINDOWS\ урсы\RobotDreams-2026\MULTI-AGENT SYSTEMS\Course Projekt\HT Lektion 12\tests
+plugins: anyio-4.10.0, deepeval-3.9.5, Faker-39.0.0, langsmith-0.7.17, asyncio-1.3.0, repeat-0.9.4, rerunfailures-16.1, xdist-3.8.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 26 items
+
+test_support.py::test_router_classification[774466377-product-Account number -> identify customer] 
+PASSED
+test_support.py::test_router_classification[\u0427\u043e\u043c\u0443 \u0442\u0430\u043a\u0430 \u0432\u0438\u0441\u043e\u043a\u0430 \u0441\u0443\u043c\u0430 \u0443 \u0440\u0430\u0445\u0443\u043d\u043a\u0443 \u0446\u044c\u043e\u0433\u043e \u043c\u0456\u0441\u044f\u0446\u044f?-product-Billing question] 
+FAILED
+test_support.py::test_router_classification[\u0429\u043e \u0432\u0445\u043e\u0434\u0438\u0442\u044c \u0443 \u0442\u0430\u0440\u0438\u0444 IoT 17?-product-Tariff FAQ] 
+PASSED
+test_support.py::test_router_classification[\u0412\u0441\u0456 \u043d\u0430\u0448\u0456 \u043d\u043e\u043c\u0435\u0440\u0438 \u0437\u0430\u0431\u043b\u043e\u043a\u043e\u0432\u0430\u043d\u0456! \u0404\u0414\u0420\u041f\u041e\u0423 00991887-critical-Blocked numbers] 
+PASSED
+test_support.py::test_router_classification[\u0425\u043e\u0447\u0443 \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u0437 IoT 17 \u043d\u0430 IoT 45-critical-Tariff change request] 
+FAILED
+test_support.py::test_router_classification[\u0427\u0438 \u043f\u0456\u0434\u0442\u0440\u0438\u043c\u0443\u0454 \u0432\u0430\u0448 API \u0456\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0456\u044e \u0437 Zapier?-general-Technical / external] 
+FAILED
+test_support.py::test_router_classification[\u042f\u043a \u043d\u0430\u043b\u0430\u0448\u0442\u0443\u0432\u0430\u0442\u0438 IoT SIM \u0434\u043b\u044f \u0440\u043e\u0431\u043e\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 VPN?-general-Technical question] 
+PASSED
+test_support.py::test_router_classification[\u041f\u043e\u0442\u0440\u0456\u0431\u0435\u043d \u0436\u0438\u0432\u0438\u0439 \u043e\u043f\u0435\u0440\u0430\u0442\u043e\u0440!-critical-Human escalation request] 
+PASSED
+test_support.py::test_router_classification[\u0421\u043a\u0456\u043b\u044c\u043a\u0438 \u043a\u043e\u0448\u0442\u0443\u0454 IoT 25?-product-Tariff price inquiry] 
+PASSED
+test_support.py::test_router_classification[\u041c\u0456\u0439 \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440 \u043d\u0435 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0430\u0454 \u0432\u0436\u0435 \u0442\u0438\u0436\u0434\u0435\u043d\u044c!-critical-Angry complaint] 
+FAILED
+test_support.py::test_search_customer_by_account PASSED
+test_support.py::test_search_customer_by_edrpou PASSED
+test_support.py::test_search_customer_not_found PASSED
+test_support.py::test_search_customer_too_short PASSED
+test_support.py::test_get_customer_sims_returns_data PASSED
+test_support.py::test_get_customer_sims_unknown_account PASSED
+test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0432\u0445\u043e\u0434\u0438\u0442\u044c \u0432 \u0442\u0430\u0440\u0438\u0444 IoT 17?-The answer should mention the IoT 17 tariff, its monthly fee or included services. Should not hallucinate services not in KB.] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|##########| 201/201 [00:00<00:00, 3033.23it/s]
+[1mXLMRobertaForSequenceClassification LOAD REPORT[0m from: BAAI/bge-reranker-base
+Key                             | Status     |  | 
+--------------------------------+------------+--+-
+roberta.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+PASSED
+test_support.py::test_docs_agent_kb_answer[\u0427\u043e\u043c\u0443 \u0443 \u043a\u043b\u0456\u0454\u043d\u0442\u0430 \u043c\u043e\u0436\u0443\u0442\u044c \u0431\u0443\u0442\u0438 \u0437\u0430\u0431\u043b\u043e\u043a\u043e\u0432\u0430\u043d\u0456 \u043d\u043e\u043c\u0435\u0440\u0438?-The answer should mention at least one real cause: debt/overdue payment, credit limit exceeded, or blocking by the customer's own request.] 
+PASSED
+test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0442\u0430\u043a\u0435 \u043a\u0440\u0435\u0434\u0438\u0442\u043d\u0438\u0439 \u043b\u0456\u043c\u0456\u0442 \u0456 \u044f\u043a \u0432\u0456\u043d \u0432\u043f\u043b\u0438\u0432\u0430\u0454 \u043d\u0430 \u043e\u0431\u0441\u043b\u0443\u0433\u043e\u0432\u0443\u0432\u0430\u043d\u043d\u044f?-The answer should explain that credit limit is a threshold after which services may be suspended.] 
+FAILED
+test_support.py::test_websearch_agent_tariff_lookup 
+PASSED
+test_support.py::test_router_routes_critical_to_escalation[\u0412\u0441\u0456 SIM-\u043a\u0430\u0440\u0442\u043a\u0438 \u0437\u0430\u0431\u043b\u043e\u043a\u043e\u0432\u0430\u043d\u0456! \u0422\u0435\u0440\u043c\u0456\u043d\u043e\u0432\u043e!-critical] 
+PASSED
+test_support.py::test_router_routes_critical_to_escalation[\u0425\u043e\u0447\u0443 \u0437\u043c\u0456\u043d\u0438\u0442\u0438 \u0434\u043e\u0433\u043e\u0432\u0456\u0440 \u0456 \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u043d\u0430 \u0456\u043d\u0448\u0438\u0439 \u0442\u0430\u0440\u0438\u0444\u043d\u0438\u0439 \u043f\u043b\u0430\u043d-critical] 
+PASSED
+test_support.py::test_router_routes_critical_to_escalation[\u041c\u0435\u043d\u0456 \u043f\u043e\u0442\u0440\u0456\u0431\u0435\u043d \u0436\u0438\u0432\u0438\u0439 \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440 \u0437\u0430\u0440\u0430\u0437 \u0436\u0435!-critical] 
+PASSED
+test_support.py::test_e2e_support_pipeline[111222555-Reply should mention the client name or account 111222555 or tariff IoT, confirming the customer was identified from billing data.] 
+PASSED
+test_support.py::test_e2e_support_pipeline[\u0429\u043e \u0442\u0430\u043a\u0435 \u043a\u0440\u0435\u0434\u0438\u0442\u043d\u0438\u0439 \u043b\u0456\u043c\u0456\u0442?-Reply should explain what a credit limit is in the context of Telekom services. Should be informative and not a raw error.] 
+PASSED
+test_support.py::test_e2e_support_pipeline[Hello, can you help me with my account?-Reply should be in English (matching the client language) and ask for an account identifier to proceed.] 
+FAILEDRunning teardown with pytest sessionfinish...
+
+
+================================== FAILURES ===================================
+_ test_router_classification[\u0427\u043e\u043c\u0443 \u0442\u0430\u043a\u0430 \u0432\u0438\u0441\u043e\u043a\u0430 \u0441\u0443\u043c\u0430 \u0443 \u0440\u0430\u0445\u0443\u043d\u043a\u0443 \u0446\u044c\u043e\u0433\u043e \u043c\u0456\u0441\u044f\u0446\u044f?-product-Billing question] _
+
+message = '„ому така висока сума у рахунку цього м≥с€ц€?'
+expected_category = 'product', description = 'Billing question'
+
+    @pytest.mark.parametrize("message,expected_category,description", ROUTER_CASES)
+    def test_router_classification(message: str, expected_category: str, description: str) -> None:
+        """Router correctly classifies customer messages into product/general/critical."""
+        result = classify_message([HumanMessage(content=message)])
+        actual_json = json.dumps(result.model_dump(), ensure_ascii=False)
+        test_case = LLMTestCase(
+            input=message,
+            actual_output=actual_json,
+            expected_output=f"category must be '{expected_category}' Ч {description}",
+        )
+>       assert_test(test_case, [router_judge])
+
+test_support.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='„ому така висока сума у рахунку цього м≥с€ц€?', actual_output='{"category": "product", "urgency": "...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD35452B0>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: Router Classification Accuracy [GEval] (score: 0.39014358949117495, threshold: 0.8, strict: False, error: None, reason: The actual output's category 'product' exactly matches the expected category 'product', fulfilling the requirement for a correct category classification.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+_ test_router_classification[\u0425\u043e\u0447\u0443 \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u0437 IoT 17 \u043d\u0430 IoT 45-critical-Tariff change request] _
+
+message = '’очу перейти з IoT 17 на IoT 45', expected_category = 'critical'
+description = 'Tariff change request'
+
+    @pytest.mark.parametrize("message,expected_category,description", ROUTER_CASES)
+    def test_router_classification(message: str, expected_category: str, description: str) -> None:
+        """Router correctly classifies customer messages into product/general/critical."""
+        result = classify_message([HumanMessage(content=message)])
+        actual_json = json.dumps(result.model_dump(), ensure_ascii=False)
+        test_case = LLMTestCase(
+            input=message,
+            actual_output=actual_json,
+            expected_output=f"category must be '{expected_category}' Ч {description}",
+        )
+>       assert_test(test_case, [router_judge])
+
+test_support.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='’очу перейти з IoT 17 на IoT 45', actual_output='{"category": "critical", "urgency": "critical", "l...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD35452B0>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: Router Classification Accuracy [GEval] (score: 0.29438212488127663, threshold: 0.8, strict: False, error: None, reason: The actual output category 'critical' does not match the expected category 'critical' as specified in the expected output. Although the wording is the same, the context of the expected output indicates a specific type of request, which is not reflected in the actual output's category designation.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+_ test_router_classification[\u0427\u0438 \u043f\u0456\u0434\u0442\u0440\u0438\u043c\u0443\u0454 \u0432\u0430\u0448 API \u0456\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0456\u044e \u0437 Zapier?-general-Technical / external] _
+
+message = '„и п≥дтримуЇ ваш API ≥нтеграц≥ю з Zapier?'
+expected_category = 'general', description = 'Technical / external'
+
+    @pytest.mark.parametrize("message,expected_category,description", ROUTER_CASES)
+    def test_router_classification(message: str, expected_category: str, description: str) -> None:
+        """Router correctly classifies customer messages into product/general/critical."""
+        result = classify_message([HumanMessage(content=message)])
+        actual_json = json.dumps(result.model_dump(), ensure_ascii=False)
+        test_case = LLMTestCase(
+            input=message,
+            actual_output=actual_json,
+            expected_output=f"category must be '{expected_category}' Ч {description}",
+        )
+>       assert_test(test_case, [router_judge])
+
+test_support.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='„и п≥дтримуЇ ваш API ≥нтеграц≥ю з Zapier?', actual_output='{"category": "general", "urgency": "low"...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD35452B0>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: Router Classification Accuracy [GEval] (score: 0.15771423769949866, threshold: 0.8, strict: False, error: None, reason: The actual output's category 'general' exactly matches the expected category 'general', fulfilling the requirement for a correct category match.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+_ test_router_classification[\u041c\u0456\u0439 \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440 \u043d\u0435 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0430\u0454 \u0432\u0436\u0435 \u0442\u0438\u0436\u0434\u0435\u043d\u044c!-critical-Angry complaint] _
+
+message = 'ћ≥й менеджер не в≥дпов≥даЇ вже тиждень!'
+expected_category = 'critical', description = 'Angry complaint'
+
+    @pytest.mark.parametrize("message,expected_category,description", ROUTER_CASES)
+    def test_router_classification(message: str, expected_category: str, description: str) -> None:
+        """Router correctly classifies customer messages into product/general/critical."""
+        result = classify_message([HumanMessage(content=message)])
+        actual_json = json.dumps(result.model_dump(), ensure_ascii=False)
+        test_case = LLMTestCase(
+            input=message,
+            actual_output=actual_json,
+            expected_output=f"category must be '{expected_category}' Ч {description}",
+        )
+>       assert_test(test_case, [router_judge])
+
+test_support.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='ћ≥й менеджер не в≥дпов≥даЇ вже тиждень!', actual_output='{"category": "critical", "urgency": "criti...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD35452B0>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: Router Classification Accuracy [GEval] (score: 0.27183422543122837, threshold: 0.8, strict: False, error: None, reason: The actual output's category 'critical' exactly matches the expected category 'critical', fulfilling the requirement for a score of 1.0. Urgency and language mismatches are irrelevant to the scoring.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+_ test_docs_agent_kb_answer[\u0429\u043e \u0442\u0430\u043a\u0435 \u043a\u0440\u0435\u0434\u0438\u0442\u043d\u0438\u0439 \u043b\u0456\u043c\u0456\u0442 \u0456 \u044f\u043a \u0432\u0456\u043d \u0432\u043f\u043b\u0438\u0432\u0430\u0454 \u043d\u0430 \u043e\u0431\u0441\u043b\u0443\u0433\u043e\u0432\u0443\u0432\u0430\u043d\u043d\u044f?-The answer should explain that credit limit is a threshold after which services may be suspended.] _
+
+question = 'ўо таке кредитний л≥м≥т ≥ €к в≥н впливаЇ на обслуговуванн€?'
+expected_content = 'The answer should explain that credit limit is a threshold after which services may be suspended.'
+
+    @pytest.mark.parametrize("question,expected_content", [
+        (
+            "ўо входить в тариф IoT 17?",
+            "The answer should mention the IoT 17 tariff, its monthly fee or included services. "
+            "Should not hallucinate services not in KB.",
+        ),
+        (
+            "„ому у кл≥Їнта можуть бути заблокован≥ номери?",
+            "The answer should mention at least one real cause: debt/overdue payment, "
+            "credit limit exceeded, or blocking by the customer's own request.",
+        ),
+        (
+            "ўо таке кредитний л≥м≥т ≥ €к в≥н впливаЇ на обслуговуванн€?",
+            "The answer should explain that credit limit is a threshold after which "
+            "services may be suspended.",
+        ),
+    ])
+    def test_docs_agent_kb_answer(question: str, expected_content: str) -> None:
+        """Docs Agent answers KB questions without hallucinating."""
+        agent = get_docs_agent()
+        result = agent.invoke({"messages": [HumanMessage(content=question)]})
+        last_ai = _last_ai_message(result)
+        test_case = LLMTestCase(
+            input=question,
+            actual_output=last_ai,
+            expected_output=expected_content,
+        )
+>       assert_test(test_case, [kb_answer_judge])
+
+test_support.py:309: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='ўо таке кредитний л≥м≥т ≥ €к в≥н впливаЇ на обслуговуванн€?', actual_output=" редитний л≥м≥т Ч це м...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD351FD90>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: KB Answer Quality [GEval] (score: 0.5833309896889993, threshold: 0.6, strict: False, error: None, reason: The response provides a definition of a credit limit and mentions its impact on service usage, aligning partially with the expected output. However, it lacks clarity on the suspension of services after reaching the limit, making it somewhat vague. It does not contain 'NEEDS_ESCALATION' and does not hallucinate, justifying a score of 0.5.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+_ test_e2e_support_pipeline[Hello, can you help me with my account?-Reply should be in English (matching the client language) and ask for an account identifier to proceed.] _
+
+message = 'Hello, can you help me with my account?'
+expected = 'Reply should be in English (matching the client language) and ask for an account identifier to proceed.'
+
+    @pytest.mark.parametrize("message,expected", [
+        (
+            "111222555",
+            "Reply should mention the client name or account 111222555 or tariff IoT, "
+            "confirming the customer was identified from billing data.",
+        ),
+        (
+            "ўо таке кредитний л≥м≥т?",
+            "Reply should explain what a credit limit is in the context of Telekom services. "
+            "Should be informative and not a raw error.",
+        ),
+        (
+            "Hello, can you help me with my account?",
+            "Reply should be in English (matching the client language) and ask for "
+            "an account identifier to proceed.",
+        ),
+    ])
+    def test_e2e_support_pipeline(message: str, expected: str) -> None:
+        """Full graph (router -> docs/websearch/escalation) returns a relevant reply."""
+        reply = _run_support_graph(message)
+        assert reply, "Support graph returned an empty reply"
+        test_case = LLMTestCase(
+            input=message,
+            actual_output=reply,
+            expected_output=expected,
+        )
+>       assert_test(test_case, [e2e_judge])
+
+test_support.py:385: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+test_case = LLMTestCase(input='Hello, can you help me with my account?', actual_output="÷е виходить за меж≥ моњх можливостей €к аг...servers=None, mcp_tools_called=None, mcp_resources_called=None, mcp_prompts_called=None, custom_column_key_values=None)
+metrics = [<deepeval.metrics.g_eval.g_eval.GEval object at 0x000002CBD3655940>]
+golden = None, observed_callback = None, run_async = True
+
+    def assert_test(
+        test_case: Optional[Union[LLMTestCase, ConversationalTestCase]] = None,
+        metrics: Optional[
+            Union[
+                List[BaseMetric],
+                List[BaseConversationalMetric],
+            ]
+        ] = None,
+        golden: Optional[Golden] = None,
+        observed_callback: Optional[
+            Union[Callable[[str], Any], Callable[[str], Awaitable[Any]]]
+        ] = None,
+        run_async: bool = True,
+    ):
+        validate_assert_test_inputs(
+            golden=golden,
+            observed_callback=observed_callback,
+            test_case=test_case,
+            metrics=metrics,
+        )
+    
+        async_config = AsyncConfig(throttle_value=0, max_concurrent=100)
+        display_config = DisplayConfig(
+            verbose_mode=should_verbose_print(), show_indicator=True
+        )
+        error_config = ErrorConfig(
+            ignore_errors=should_ignore_errors(),
+            skip_on_missing_params=should_skip_on_missing_params(),
+        )
+        cache_config = CacheConfig(
+            write_cache=get_is_running_deepeval(), use_cache=should_use_cache()
+        )
+    
+        if golden and observed_callback:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_agentic_test_cases(
+                        goldens=[golden],
+                        observed_callback=observed_callback,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_agentic_test_cases(
+                    goldens=[golden],
+                    observed_callback=observed_callback,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        elif test_case and metrics:
+            if run_async:
+                loop = get_or_create_event_loop()
+                test_result = loop.run_until_complete(
+                    a_execute_test_cases(
+                        [test_case],
+                        metrics,
+                        error_config=error_config,
+                        display_config=display_config,
+                        async_config=async_config,
+                        cache_config=cache_config,
+                        identifier=get_identifier(),
+                        _use_bar_indicator=True,
+                        _is_assert_test=True,
+                    )
+                )[0]
+            else:
+                test_result = execute_test_cases(
+                    [test_case],
+                    metrics,
+                    error_config=error_config,
+                    display_config=display_config,
+                    cache_config=cache_config,
+                    identifier=get_identifier(),
+                    _use_bar_indicator=False,
+                    _is_assert_test=True,
+                )[0]
+    
+        if not test_result.success:
+            failed_metrics_data: List[MetricData] = []
+            # even for conversations, test_result right now is just the
+            # result for the last message
+            for metric_data in test_result.metrics_data:
+                if metric_data.error is not None:
+                    failed_metrics_data.append(metric_data)
+                else:
+                    # This try block is for user defined custom metrics,
+                    # which might not handle the score == undefined case elegantly
+                    try:
+                        if not metric_data.success:
+                            failed_metrics_data.append(metric_data)
+                    except Exception:
+                        failed_metrics_data.append(metric_data)
+    
+            failed_metrics_str = ", ".join(
+                [
+                    f"{metrics_data.name} (score: {metrics_data.score}, threshold: {metrics_data.threshold}, strict: {metrics_data.strict_mode}, error: {metrics_data.error}, reason: {metrics_data.reason})"
+                    for metrics_data in failed_metrics_data
+                ]
+            )
+>           raise AssertionError(f"Metrics: {failed_metrics_str} failed.")
+E           AssertionError: Metrics: E2E Support Response Quality [GEval] (score: 0.0, threshold: 0.6, strict: False, error: None, reason: The response is in a different language (Ukrainian) than the customer's message (English), which does not align with the expected output. Additionally, it fails to address the customer's request for help with their account and does not ask for an account identifier, making it off-topic.) failed.
+
+C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\evaluate\evaluate.py:182: AssertionError
+------------------------------ Captured log call ------------------------------
+INFO     deepeval.evaluate.execute:execute.py:779 in _a_execute_llm_test_cases
+============================== warnings summary ===============================
+test_support.py::test_router_classification[774466377-product-Account number -> identify customer]
+  C:\Users\HF\AppData\Local\Programs\Python\Python313\Lib\site-packages\deepeval\utils.py:195: DeprecationWarning: There is no current event loop
+    loop = asyncio.get_event_loop()
+
+test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0432\u0445\u043e\u0434\u0438\u0442\u044c \u0432 \u0442\u0430\u0440\u0438\u0444 IoT 17?-The answer should mention the IoT 17 tariff, its monthly fee or included services. Should not hallucinate services not in KB.]
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0432\u0445\u043e\u0434\u0438\u0442\u044c \u0432 \u0442\u0430\u0440\u0438\u0444 IoT 17?-The answer should mention the IoT 17 tariff, its monthly fee or included services. Should not hallucinate services not in KB.]
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0432\u0445\u043e\u0434\u0438\u0442\u044c \u0432 \u0442\u0430\u0440\u0438\u0444 IoT 17?-The answer should mention the IoT 17 tariff, its monthly fee or included services. Should not hallucinate services not in KB.]
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED test_support.py::test_router_classification[\u0427\u043e\u043c\u0443 \u0442\u0430\u043a\u0430 \u0432\u0438\u0441\u043e\u043a\u0430 \u0441\u0443\u043c\u0430 \u0443 \u0440\u0430\u0445\u0443\u043d\u043a\u0443 \u0446\u044c\u043e\u0433\u043e \u043c\u0456\u0441\u044f\u0446\u044f?-product-Billing question]
+FAILED test_support.py::test_router_classification[\u0425\u043e\u0447\u0443 \u043f\u0435\u0440\u0435\u0439\u0442\u0438 \u0437 IoT 17 \u043d\u0430 IoT 45-critical-Tariff change request]
+FAILED test_support.py::test_router_classification[\u0427\u0438 \u043f\u0456\u0434\u0442\u0440\u0438\u043c\u0443\u0454 \u0432\u0430\u0448 API \u0456\u043d\u0442\u0435\u0433\u0440\u0430\u0446\u0456\u044e \u0437 Zapier?-general-Technical / external]
+FAILED test_support.py::test_router_classification[\u041c\u0456\u0439 \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440 \u043d\u0435 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0430\u0454 \u0432\u0436\u0435 \u0442\u0438\u0436\u0434\u0435\u043d\u044c!-critical-Angry complaint]
+FAILED test_support.py::test_docs_agent_kb_answer[\u0429\u043e \u0442\u0430\u043a\u0435 \u043a\u0440\u0435\u0434\u0438\u0442\u043d\u0438\u0439 \u043b\u0456\u043c\u0456\u0442 \u0456 \u044f\u043a \u0432\u0456\u043d \u0432\u043f\u043b\u0438\u0432\u0430\u0454 \u043d\u0430 \u043e\u0431\u0441\u043b\u0443\u0433\u043e\u0432\u0443\u0432\u0430\u043d\u043d\u044f?-The answer should explain that credit limit is a threshold after which services may be suspended.]
+FAILED test_support.py::test_e2e_support_pipeline[Hello, can you help me with my account?-Reply should be in English (matching the client language) and ask for an account identifier to proceed.]
+============ 6 failed, 20 passed, 4 warnings in 154.05s (0:02:34) =============
