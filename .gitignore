@@ -1,0 +1,50 @@
+# Environment — НІКОЛИ не публікувати
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# FAISS index & knowledge chunks (rebuild via: python ingest.py)
+index/
+
+# Generated output reports
+output/
+
+# SQLite databases (містять дані сесій і розмов)
+data/*.db
+data/*.sqlite
+
+# Customer Excel files (конфіденційні дані клієнтів)
+data/customers/
+
+# Debug / scratch files (тимчасові файли розробки)
+_*.py
+_*.txt
+_*.out
+uvicorn_out.txt
+repl_test_output.txt
+
+# Internal dev notes (не для публічного перегляду)
+es leuft.md
+15 запитань на перевірку системи.txt
+DEFENSE_GUIDE.md
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

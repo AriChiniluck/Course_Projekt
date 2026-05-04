@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telekom Support</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #244f70;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }
+    header .avatar {
+      width: 40px; height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    header .info h1 { font-size: 16px; font-weight: 600; }
+    header .info p  { font-size: 12px; opacity: .85; }
+    #status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #aaa;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    #status-dot.online  { background: #4caf50; }
+    #status-dot.loading { background: #ff9800; animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── Chat area ── */
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      max-width: 72%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    .msg.agent {
+      background: white;
+      color: #1a1a1a;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    .msg.user {
+      background: #446580;
+      color: white;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+    }
+    .msg-meta {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+    .msg-meta.user { text-align: right; }
+
+    /* Typing indicator */
+    .typing {
+      display: flex; gap: 5px;
+      align-items: center;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    .typing span {
+      width: 8px; height: 8px;
+      background: #bbb;
+      border-radius: 50%;
+      animation: bounce .9s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: .15s; }
+    .typing span:nth-child(3) { animation-delay: .3s;  }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); }
+      30%          { transform: translateY(-6px); }
+    }
+
+    /* ── Input area ── */
+    footer {
+      background: white;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      border-top: 1px solid #e0e0e0;
+    }
+    #input {
+      flex: 1;
+      border: 1.5px solid #ddd;
+      border-radius: 22px;
+      padding: 10px 16px;
+      font-size: 14px;
+      resize: none;
+      outline: none;
+      max-height: 120px;
+      font-family: inherit;
+      line-height: 1.4;
+      transition: border-color .2s;
+    }
+    #input:focus { border-color: #244f70; }
+    #send {
+      width: 44px; height: 44px;
+      background: #244f70;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s, transform .1s;
+    }
+    #send:hover   { background: #244f70; }
+    #send:active  { transform: scale(.92); }
+    #send:disabled { background: #ccc; cursor: not-allowed; }
+    #send svg { width: 20px; height: 20px; fill: white; }
+
+    /* ── Error banner ── */
+    #error-banner {
+      display: none;
+      background: #fff3cd;
+      color: #856404;
+      padding: 8px 16px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* ── Welcome overlay ── */
+    #welcome-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #welcome-box {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: min(360px, 90vw);
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+    #welcome-box .logo { font-size: 36px; }
+    #welcome-box h2 { font-size: 18px; color: #244f70; }
+    #welcome-box p  { font-size: 13px; color: #666; }
+    #name-input {
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 15px;
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+      transition: border-color .2s;
+    }
+    #name-input:focus { border-color: #244f70; }
+    #start-btn {
+      background: #244f70;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #start-btn:hover { background: #1a3a54; }
+    #skip-link {
+      font-size: 12px;
+      color: #aaa;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ── Language selector ── */
+    .lang-selector {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .lang-btn {
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      padding: 5px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      background: white;
+      color: #555;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .lang-btn:hover  { border-color: #244f70; color: #244f70; }
+    .lang-btn.active { border-color: #244f70; background: #244f70; color: white; }
+
+    /* ── Help button ── */
+    #help-btn {
+      background: rgba(255,255,255,.18);
+      border: 1.5px solid rgba(255,255,255,.4);
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 10px;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    #help-btn:hover { background: rgba(255,255,255,.3); }
+
+    /* ── Help panel ── */
+    #help-panel {
+      position: fixed;
+      top: 0; right: -360px;
+      width: 340px;
+      height: 100vh;
+      background: white;
+      box-shadow: -4px 0 20px rgba(0,0,0,.18);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      transition: right .3s ease;
+      overflow: hidden;
+    }
+    #help-panel.open { right: 0; }
+    #help-panel-head {
+      background: #244f70;
+      color: white;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    #help-panel-head h3 { font-size: 15px; }
+    #help-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    #help-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+    }
+    #help-note {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .help-client {
+      margin-bottom: 12px;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .help-client-name {
+      background: #f5f7fa;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #244f70;
+    }
+    .help-row {
+      display: flex;
+      align-items: flex-start;
+      padding: 5px 12px;
+      border-top: 1px solid #f0f0f0;
+      gap: 8px;
+    }
+    .help-row-label {
+      font-size: 11px;
+      color: #999;
+      min-width: 58px;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+    .help-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .chip {
+      background: #eef3f8;
+      border: 1px solid #c8d8e8;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 12px;
+      font-family: monospace;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      user-select: none;
+    }
+    .chip:hover  { background: #d4e6f5; }
+    .chip:active { transform: scale(.94); }
+    .chip.copied { background: #c8f0d0; border-color: #7cc49a; }
+    .help-phones {
+      font-size: 12px;
+      color: #555;
+      padding-top: 4px;
+      font-family: monospace;
+    }
+
+    /* ── Feedback button (footer) ── */
+    #feedback-btn {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1.5px solid #ccc;
+      border-radius: 20px;
+      padding: 6px 13px;
+      font-size: 13px;
+      color: #555;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: inherit;
+      transition: border-color .2s, color .2s;
+    }
+    #feedback-btn:hover { border-color: #244f70; color: #244f70; }
+    #feedback-btn.visible { display: flex; }
+
+    /* ── Feedback modal ── */
+    #feedback-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    #feedback-overlay.open { display: flex; }
+    #feedback-box {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 24px;
+      width: min(360px, 92vw);
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    #feedback-box h3 { font-size: 17px; color: #244f70; text-align: center; }
+    .fb-label { font-size: 13px; color: #555; margin-bottom: 4px; }
+    .star-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .star {
+      font-size: 32px;
+      cursor: pointer;
+      color: #ddd;
+      transition: color .15s, transform .1s;
+      user-select: none;
+    }
+    .star:hover, .star.active { color: #f5a623; }
+    .star:active { transform: scale(.88); }
+    #feedback-textarea {
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    #feedback-textarea:focus { border-color: #244f70; }
+    .fb-actions { display: flex; gap: 10px; }
+    #fb-submit {
+      flex: 1;
+      background: #244f70;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 11px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s;
+    }
+    #fb-submit:hover { background: #1a3a54; }
+    #fb-submit:disabled { background: #ccc; cursor: not-allowed; }
+    #fb-cancel {
+      background: none;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      color: #666;
+      transition: border-color .2s;
+    }
+    #fb-cancel:hover { border-color: #999; }
+    #fb-success {
+      display: none;
+      text-align: center;
+      font-size: 22px;
+      padding: 10px 0;
+    }
+    #fb-success p { font-size: 14px; color: #444; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="avatar">📡</div>
+  <div class="info">
+    <h1 id="header-title">Telekom Support</h1>
+    <p id="session-label">Підключення…</p>
+  </div>
+  <div id="status-dot" class="loading"></div>
+  <button id="help-btn" title="?">?</button>
+</header>
+
+<div id="welcome-overlay">
+  <div id="welcome-box">
+    <div class="logo">📡</div>
+    <div class="lang-selector">
+      <button class="lang-btn active" data-lang="uk">UA</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="de">DE</button>
+    </div>
+    <h2 id="welcome-title">Telekom Support</h2>
+    <p id="welcome-desc">Введіть ваше ім'я або псевдонім,<br>щоб ми могли звертатись до вас особисто.</p>
+    <input id="name-input" type="text" placeholder="Наприклад: Клієнт 1" maxlength="64" />
+    <button id="start-btn">Розпочати чат</button>
+    <span id="skip-link">Пропустити</span>
+  </div>
+</div>
+
+<div id="error-banner">⚠️ Не вдалося підключитись до сервера. Переконайтесь що <code>python run_api.py</code> запущено.</div>
+
+<div id="help-panel">
+  <div id="help-panel-head">
+    <h3 id="help-title">Тестові клієнти</h3>
+    <button id="help-close">×</button>
+  </div>
+  <div id="help-body">
+    <p id="help-note">Натисніть на значення — воно вставиться в поле чату.</p>
+    <div id="help-clients"></div>
+  </div>
+</div>
+
+<div id="chat"></div>
+
+<div id="feedback-overlay">
+  <div id="feedback-box">
+    <h3 id="fb-title">Feedback</h3>
+    <div>
+      <div class="fb-label" id="fb-rating-label">&#x2605; Оцінка</div>
+      <div class="star-row" id="star-row">
+        <span class="star" data-v="1">★</span>
+        <span class="star" data-v="2">★</span>
+        <span class="star" data-v="3">★</span>
+        <span class="star" data-v="4">★</span>
+        <span class="star" data-v="5">★</span>
+      </div>
+    </div>
+    <div>
+      <div class="fb-label" id="fb-comment-label">Коментар</div>
+      <textarea id="feedback-textarea" rows="3"></textarea>
+    </div>
+    <div id="fb-success">&#x1F389;<p id="fb-success-text">Дякуємо за відгук!</p></div>
+    <div class="fb-actions" id="fb-actions">
+      <button id="fb-submit">Надіслати</button>
+      <button id="fb-cancel">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <button id="feedback-btn">💬 Feedback</button>
+  <textarea id="input" rows="1" placeholder="Введіть повідомлення…" disabled></textarea>
+  <button id="send" disabled>
+    <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+  </button>
+</footer>
+
+<script>
+  const API = window.location.origin;  // автоматично: localhost, WiFi або ngrok
+  let sessionId   = null;
+  let userName    = null;
+  let currentLang = "uk";
+
+  // ── Translations ─────────────────────────────────────────────────────────
+  const T = {
+    uk: {
+      pageTitle:       "Telekom Support",
+      connecting:      "Підключення…",
+      welcomeTitle:    "Telekom Support",
+      welcomeDesc:     "Введіть ваше ім'я або псевдонім,<br>щоб ми могли звертатись до вас особисто.",
+      namePlaceholder: "Наприклад: Клієнт 1",
+      startBtn:        "Розпочати чат",
+      skipLink:        "Пропустити",
+      errorBanner:     "⚠️ Не вдалося підключитись до сервера. Переконайтесь що <code>python run_api.py</code> запущено.",
+      inputPlaceholder:"Введіть повідомлення…",
+      sessionPrefix:   "Сесія",
+      connError:       "Помилка підключення",
+      timeLocale:      "uk-UA",
+      greetNamed: n => `Доброго дня, ${n}! 👋\nЧим можу допомогти? Надайте, будь ласка, ваш номер телефону, особовий рахунок або ЄДРПОУ.`,
+      greetAnon:       "Вітаємо у службі підтримки Telekom! 👋\nДля початку роботи, будь ласка, надайте ваш номер телефону, особовий рахунок або ЄДРПОУ.",
+      errReply:        "Виникла помилка. Спробуйте ще раз.",
+      errConn:         "Помилка з'єднання. Перевірте що сервер працює.",
+      helpTitle:       "Тестові клієнти",
+      helpNote:        "Натисніть на значення — воно вставиться в поле чату.",
+      helpLblAcct:     "Рахунок",
+      helpLblEdr:      "ЄДРПОУ",
+      helpLblTel:      "Телефони",
+      fbBtn:           "💬 Відгук",
+      fbTitle:         "Залишити відгук",
+      fbRatingLabel:   "★ Оцінка",
+      fbCommentLabel:  "Коментар",
+      fbCommentPh:     "Ваші враження від роботи з чат-ботом…",
+      fbSubmit:        "Надіслати",
+      fbCancel:        "Скасувати",
+      fbSuccess:       "🎉",
+      fbSuccessText:   "Дякуємо за відгук!",
+    },
+    en: {
+      pageTitle:       "Telekom Support",
+      connecting:      "Connecting…",
+      welcomeTitle:    "Telekom Support",
+      welcomeDesc:     "Enter your name or nickname<br>so we can address you personally.",
+      namePlaceholder: "E.g.: Customer 1",
+      startBtn:        "Start Chat",
+      skipLink:        "Skip",
+      errorBanner:     "⚠️ Could not connect to server. Make sure <code>python run_api.py</code> is running.",
+      inputPlaceholder:"Type a message…",
+      sessionPrefix:   "Session",
+      connError:       "Connection error",
+      timeLocale:      "en-GB",
+      greetNamed: n => `Good day, ${n}! 👋\nHow can I help you? Please provide your phone number, account number or company ID.`,
+      greetAnon:       "Welcome to Telekom Support! 👋\nTo get started, please provide your phone number, account number or company ID.",
+      errReply:        "An error occurred. Please try again.",
+      errConn:         "Connection error. Please check that the server is running.",
+      helpTitle:       "Test clients",
+      helpNote:        "Click a value to insert it into the chat input.",
+      helpLblAcct:     "Account",
+      helpLblEdr:      "Company ID",
+      helpLblTel:      "Phones",
+      fbBtn:           "💬 Feedback",
+      fbTitle:         "Leave Feedback",
+      fbRatingLabel:   "★ Rating",
+      fbCommentLabel:  "Comment",
+      fbCommentPh:     "Your impressions from using the chatbot…",
+      fbSubmit:        "Send",
+      fbCancel:        "Cancel",
+      fbSuccess:       "🎉",
+      fbSuccessText:   "Thank you for your feedback!",
+    },
+    de: {
+      pageTitle:       "Telekom Support",
+      connecting:      "Verbinden…",
+      welcomeTitle:    "Telekom Support",
+      welcomeDesc:     "Bitte geben Sie Ihren Namen oder Spitznamen ein,<br>damit wir Sie persönlich ansprechen können.",
+      namePlaceholder: "z.B.: Kunde 1",
+      startBtn:        "Chat starten",
+      skipLink:        "Überspringen",
+      errorBanner:     "⚠️ Verbindung zum Server fehlgeschlagen. Bitte stellen Sie sicher, dass <code>python run_api.py</code> läuft.",
+      inputPlaceholder:"Nachricht eingeben…",
+      sessionPrefix:   "Sitzung",
+      connError:       "Verbindungsfehler",
+      timeLocale:      "de-DE",
+      greetNamed: n => `Guten Tag, ${n}! 👋\nWie kann ich Ihnen helfen? Bitte geben Sie Ihre Telefonnummer, Ihr Kundenkonto oder Ihre Steuer-ID an.`,
+      greetAnon:       "Willkommen beim Telekom Support! 👋\nBitte geben Sie zunächst Ihre Telefonnummer, Ihr Kundenkonto oder Ihre Steuer-ID an.",
+      errReply:        "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      errConn:         "Verbindungsfehler. Bitte überprüfen Sie, ob der Server läuft.",
+      helpTitle:       "Testkunden",
+      helpNote:        "Klicken Sie auf einen Wert — er wird in das Chat-Eingabefeld eingefügt.",
+      helpLblAcct:     "Konto",
+      helpLblEdr:      "Steuer-ID",
+      helpLblTel:      "Telefone",
+      fbBtn:           "💬 Feedback",
+      fbTitle:         "Feedback hinterlassen",
+      fbRatingLabel:   "★ Bewertung",
+      fbCommentLabel:  "Kommentar",
+      fbCommentPh:     "Ihre Erfahrungen mit dem Chatbot…",
+      fbSubmit:        "Absenden",
+      fbCancel:        "Abbrechen",
+      fbSuccess:       "🎉",
+      fbSuccessText:   "Vielen Dank für Ihr Feedback!",
+    },
+  };
+
+  // ── Client reference data (no tariffs — chatbot reports those) ───────────
+  const CLIENTS = [
+    { uk:"Клієнт 1", en:"Customer 1", de:"Kunde 1",
+      accounts:["111222555"], edrpou:"11113554881", phones:"1239648–1239687" },
+    { uk:"Клієнт 2", en:"Customer 2", de:"Kunde 2",
+      accounts:["774466377"], edrpou:"33333994444", phones:"1230363–3340737" },
+    { uk:"Клієнт 3", en:"Customer 3", de:"Kunde 3",
+      accounts:["111333999"], edrpou:"99999917798", phones:"1235409–1235413" },
+    { uk:"Клієнт 4", en:"Customer 4", de:"Kunde 4",
+      accounts:["999477111"], edrpou:"44443236907", phones:"3210521–3210525" },
+    { uk:"Клієнт 5", en:"Customer 5", de:"Kunde 5",
+      accounts:["888777999","777999777","222777333"], edrpou:"22220048222", phones:"4444163–4444277" },
+    { uk:"Клієнт 6", en:"Customer 6", de:"Kunde 6",
+      accounts:["666444777"], edrpou:"11199988777", phones:"2220631–2220679" },
+  ];
+
+  function makeChip(value) {
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = value;
+    chip.addEventListener("click", () => {
+      inputEl.value = value;
+      inputEl.dispatchEvent(new Event("input"));
+      inputEl.focus();
+      document.getElementById("help-panel").classList.remove("open");
+      chip.classList.add("copied");
+      setTimeout(() => chip.classList.remove("copied"), 700);
+    });
+    return chip;
+  }
+
+  function makeHelpRow(label, chips, plainText) {
+    const row = document.createElement("div");
+    row.className = "help-row";
+    const lbl = document.createElement("div");
+    lbl.className = "help-row-label";
+    lbl.textContent = label;
+    row.appendChild(lbl);
+    if (chips) {
+      const wrap = document.createElement("div");
+      wrap.className = "help-chips";
+      chips.forEach(ch => wrap.appendChild(ch));
+      row.appendChild(wrap);
+    } else {
+      const span = document.createElement("span");
+      span.className = "help-phones";
+      span.textContent = plainText;
+      row.appendChild(span);
+    }
+    return row;
+  }
+
+  function buildHelpTable() {
+    const t = T[currentLang];
+    document.getElementById("help-title").textContent = t.helpTitle;
+    document.getElementById("help-note").textContent  = t.helpNote;
+    const container = document.getElementById("help-clients");
+    container.innerHTML = "";
+    CLIENTS.forEach(c => {
+      const block = document.createElement("div");
+      block.className = "help-client";
+      const nameEl = document.createElement("div");
+      nameEl.className = "help-client-name";
+      nameEl.textContent = c[currentLang] || c.uk;
+      block.appendChild(nameEl);
+      block.appendChild(makeHelpRow(t.helpLblAcct, c.accounts.map(v => makeChip(v))));
+      block.appendChild(makeHelpRow(t.helpLblEdr,  [makeChip(c.edrpou)]));
+      block.appendChild(makeHelpRow(t.helpLblTel,  null, c.phones));
+      container.appendChild(block);
+    });
+  }
+
+  function applyLang(lang) {
+    currentLang = lang;
+    const t = T[lang];
+    document.documentElement.lang          = lang;
+    document.title                         = t.pageTitle;
+    document.getElementById("welcome-title").textContent  = t.welcomeTitle;
+    document.getElementById("welcome-desc").innerHTML     = t.welcomeDesc;
+    document.getElementById("name-input").placeholder     = t.namePlaceholder;
+    document.getElementById("start-btn").textContent      = t.startBtn;
+    document.getElementById("skip-link").textContent      = t.skipLink;
+    document.getElementById("error-banner").innerHTML     = t.errorBanner;
+    document.getElementById("input").placeholder          = t.inputPlaceholder;
+    if (!sessionId) {
+      document.getElementById("session-label").textContent = t.connecting;
+    }
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+    // update feedback UI labels if modal is open
+    document.getElementById("fb-title").textContent         = t.fbTitle;
+    document.getElementById("fb-rating-label").textContent  = t.fbRatingLabel;
+    document.getElementById("fb-comment-label").textContent = t.fbCommentLabel;
+    document.getElementById("feedback-textarea").placeholder= t.fbCommentPh;
+    document.getElementById("fb-submit").textContent        = t.fbSubmit;
+    document.getElementById("fb-cancel").textContent        = t.fbCancel;
+    document.getElementById("fb-success-text").textContent  = t.fbSuccessText;
+    document.getElementById("feedback-btn").textContent     = t.fbBtn;
+    buildHelpTable();
+  }
+
+  const chatEl      = document.getElementById("chat");
+  const inputEl     = document.getElementById("input");
+  const sendBtn     = document.getElementById("send");
+  const statusDot   = document.getElementById("status-dot");
+  const sessionLbl  = document.getElementById("session-label");
+  const errorBanner = document.getElementById("error-banner");
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  function now() {
+    return new Date().toLocaleTimeString(T[currentLang].timeLocale, { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function addMessage(text, role) {
+    const wrap = document.createElement("div");
+
+    const msg = document.createElement("div");
+    msg.className = `msg ${role}`;
+    msg.textContent = text;
+
+    const meta = document.createElement("div");
+    meta.className = `msg-meta ${role}`;
+    meta.textContent = role === "agent" ? `T-Bot · ${now()}` : now();
+
+    wrap.appendChild(msg);
+    wrap.appendChild(meta);
+    chatEl.appendChild(wrap);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return wrap;
+  }
+
+  function showTyping() {
+    const el = document.createElement("div");
+    el.className = "typing";
+    el.innerHTML = "<span></span><span></span><span></span>";
+    chatEl.appendChild(el);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return el;
+  }
+
+  function setReady(ready) {
+    inputEl.disabled  = !ready;
+    sendBtn.disabled  = !ready;
+    statusDot.className = ready ? "online" : "loading";
+    if (ready) document.getElementById("feedback-btn").classList.add("visible");
+  }
+
+  // ── Init: create session ─────────────────────────────────────────────────
+
+  async function init(name) {
+    userName = (name || "").trim() || null;
+    const overlay = document.getElementById("welcome-overlay");
+    overlay.style.display = "none";
+
+    try {
+      const body = userName ? JSON.stringify({ user_name: userName }) : "{}";
+      const res = await fetch(`${API}/sessions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      sessionId = data.session_id;
+      const t = T[currentLang];
+      sessionLbl.textContent = userName ? `${userName} · ${sessionId}` : `${t.sessionPrefix} ${sessionId}`;
+      setReady(true);
+      addMessage(userName ? t.greetNamed(userName) : t.greetAnon, "agent");
+    } catch (e) {
+      statusDot.className = "";
+      statusDot.style.background = "#e2001a";
+      sessionLbl.textContent = T[currentLang].connError;
+      errorBanner.style.display = "block";
+    }
+  }
+
+  // ── Send message ─────────────────────────────────────────────────────────
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text || !sessionId) return;
+
+    inputEl.value = "";
+    inputEl.style.height = "auto";
+    setReady(false);
+
+    addMessage(text, "user");
+    const typingEl = showTyping();
+
+    try {
+      const res = await fetch(`${API}/sessions/${sessionId}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+      const data = await res.json();
+      typingEl.remove();
+      addMessage(data.reply || T[currentLang].errReply, "agent");
+    } catch (e) {
+      typingEl.remove();
+      addMessage(T[currentLang].errConn, "agent");
+    } finally {
+      setReady(true);
+      inputEl.focus();
+    }
+  }
+
+  // ── Events ───────────────────────────────────────────────────────────────
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Auto-resize textarea
+  inputEl.addEventListener("input", () => {
+    inputEl.style.height = "auto";
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
+  });
+
+  // ── Language buttons ──────────────────────────────────────────────────────
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+  });
+
+  // ── Feedback panel ────────────────────────────────────────────────────────────
+  let selectedRating = 0;
+
+  function openFeedback() {
+    selectedRating = 0;
+    document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+    document.getElementById("feedback-textarea").value = "";
+    document.getElementById("fb-success").style.display  = "none";
+    document.getElementById("fb-actions").style.display  = "flex";
+    document.getElementById("fb-submit").disabled = false;
+    document.getElementById("feedback-overlay").classList.add("open");
+  }
+
+  function closeFeedback() {
+    document.getElementById("feedback-overlay").classList.remove("open");
+  }
+
+  // Star hover / click
+  document.querySelectorAll(".star").forEach(star => {
+    star.addEventListener("mouseenter", () => {
+      const v = +star.dataset.v;
+      document.querySelectorAll(".star").forEach(s => s.classList.toggle("active", +s.dataset.v <= v));
+    });
+    star.addEventListener("mouseleave", () => {
+      document.querySelectorAll(".star").forEach(s => s.classList.toggle("active", +s.dataset.v <= selectedRating));
+    });
+    star.addEventListener("click", () => {
+      selectedRating = +star.dataset.v;
+      document.querySelectorAll(".star").forEach(s => s.classList.toggle("active", +s.dataset.v <= selectedRating));
+    });
+  });
+
+  document.getElementById("feedback-btn").addEventListener("click", openFeedback);
+  document.getElementById("fb-cancel").addEventListener("click", closeFeedback);
+  document.getElementById("feedback-overlay").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("feedback-overlay")) closeFeedback();
+  });
+
+  document.getElementById("fb-submit").addEventListener("click", async () => {
+    const comment = document.getElementById("feedback-textarea").value.trim();
+    const btn = document.getElementById("fb-submit");
+    btn.disabled = true;
+    try {
+      await fetch(`${API}/sessions/${sessionId}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating: selectedRating || null, comment: comment || null }),
+      });
+    } catch (_) { /* non-critical */ }
+    const t = T[currentLang];
+    document.getElementById("fb-actions").style.display = "none";
+    document.getElementById("fb-success").style.display = "block";
+    document.getElementById("fb-success").firstChild.textContent = t.fbSuccess;
+    document.getElementById("fb-success-text").textContent = t.fbSuccessText;
+    setTimeout(closeFeedback, 2200);
+  });
+
+  // ── Help panel ────────────────────────────────────────────────────────────
+  document.getElementById("help-btn").addEventListener("click", () => {
+    document.getElementById("help-panel").classList.toggle("open");
+  });
+  document.getElementById("help-close").addEventListener("click", () => {
+    document.getElementById("help-panel").classList.remove("open");
+  });
+
+  // ── Welcome screen ────────────────────────────────────────────────────────
+  const nameInput = document.getElementById("name-input");
+  const startBtn  = document.getElementById("start-btn");
+  const skipLink  = document.getElementById("skip-link");
+
+  startBtn.addEventListener("click", () => init(nameInput.value));
+  skipLink.addEventListener("click", () => init(""));
+  nameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") init(nameInput.value);
+  });
+
+  // Apply default language on load
+  applyLang("uk");
+  nameInput.focus();
+</script>
+</body>
+</html>
