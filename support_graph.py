@@ -33,26 +33,31 @@ try:
     from langgraph.checkpoint.sqlite import SqliteSaver as _SqliteSaver
     _SQLITE_AVAILABLE = True
 except ImportError:
+    # SqliteSaver недоступний — дозволимо завантажитись без нього (режим REPL).
     _SQLITE_AVAILABLE = False
 
-# Agent modules are imported lazily inside node functions to avoid loading
-# transformers / sentence-transformers at module import time (slow on Windows).
+# Агентні модулі імпортуються ліниво всередині функцій-нод щоб не завантажувати
+# transformers / sentence-transformers при старті модуля (повільно на Windows).
 from observability import get_langfuse_handler
 
 # ---------------------------------------------------------------------------
-# State
+# Стан графу
 # ---------------------------------------------------------------------------
 
 class SupportState(TypedDict):
+    # add_messages — спеціальний reducer: додає нові повідомлення до списку,
+    # а не перезаписує його. Це ключ до пам'яті розмови в LangGraph.
     messages: Annotated[list[BaseMessage], add_messages]
     classification: dict          # ClassificationOutput.model_dump()
-    session_id: str
+    session_id: str               # читається агентом ескалації для формування листа
 
 
 # ---------------------------------------------------------------------------
-# Constants
+# Константи
 # ---------------------------------------------------------------------------
 
+# Сигнал, який docs/websearch агент додає на початок відповіді
+# коли не зміг вирішити проблему. Граф переходить до escalation_node.
 _ESCALATION_SIGNAL = "NEEDS_ESCALATION:"
 
 
@@ -85,7 +90,11 @@ def _with_langfuse(config: RunnableConfig) -> RunnableConfig:
 
 
 def _delta_messages(before: list, after: list) -> list:
-    """Return only the messages that the agent *added* (i.e. after[len(before):])."""
+    """Return only the messages that the agent *added* (i.e. after[len(before):]).
+    
+    Навіщо агент повертає всю історію (і старі і нові повідомлення),
+    до стану записуємо лише нові — щоб не дублювати історію.
+    """
     if len(after) <= len(before):
         return []
     return after[len(before):]
@@ -122,29 +131,53 @@ def websearch_node(state: SupportState, config: RunnableConfig) -> dict:
     return {"messages": _delta_messages(state["messages"], result["messages"])}
 
 
-def off_topic_node(state: SupportState, config: RunnableConfig) -> dict:  # noqa: ARG001
-    """Return a polite refusal for questions outside the Telekom support scope."""
-    from langchain_core.messages import AIMessage  # lazy import
+def off_topic_node(state: SupportState, config: RunnableConfig) -> dict:
+    """Return a polite refusal for questions outside the Telekom support scope.
+
+    Uses a small LLM call so the response varies naturally and acknowledges
+    what the user actually said, instead of repeating a hardcoded string.
+    Мова визначається з classification.language, встановленого Routerом.
+    """
+    from langchain_core.messages import AIMessage, SystemMessage  # lazy import
+    from config import build_chat_model, settings  # lazy import
+
     lang = state.get("classification", {}).get("language", "uk")
-    refusals = {
-        "uk": (
-            "Це виходить за межі моїх можливостей як агента підтримки Telekom. "
-            "Я можу допомогти з питань щодо ваших послуг зв'язку, рахунків, тарифів або технічних проблем. "
-            "Чим можу вам допомогти?"
-        ),
-        "en": (
-            "That falls outside my scope as a Telekom support agent. "
-            "I can help with your telecom services, billing, tariffs, or technical issues. "
-            "How can I assist you?"
-        ),
-        "de": (
-            "Das liegt außerhalb meines Aufgabenbereichs als Telekom-Support-Agent. "
-            "Ich kann Ihnen bei Fragen zu Ihren Telekommunikationsdiensten, Rechnungen, Tarifen oder technischen Problemen helfen. "
-            "Wie kann ich Ihnen behilflich sein?"
-        ),
-    }
-    text = refusals.get(lang, refusals["uk"])
-    return {"messages": [AIMessage(content=text)]}
+    lang_instructions = {
+        "uk": "Відповідай українською мовою.",
+        "en": "Reply in English.",
+        "de": "Antworte auf Deutsch.",
+    }.get(lang, "Відповідай українською мовою.")
+
+    system = (
+        "You are T-Bot, a friendly customer support assistant for Telekom. "
+        "The customer's message is outside the scope of telecom support. "
+        "Politely acknowledge what they said, explain that you specialise in "
+        "Telekom services, and briefly list what you CAN help with: "
+        "tariffs & pricing, account & billing inquiries, SIM/number issues, "
+        "internet & mobile service problems, roaming, and escalation to a human operator. "
+        "Keep the reply concise (2-4 sentences). Do NOT be robotic — be warm and helpful. "
+        + lang_instructions
+    )
+    try:
+        llm = build_chat_model(temperature=0.7, model=settings.planner_model)
+        messages_for_llm = [SystemMessage(content=system)] + list(state["messages"][-4:])
+        response = llm.invoke(messages_for_llm, **(config or {}))
+        return {"messages": [AIMessage(content=response.content)]}
+    except Exception:
+        # Fallback to hardcoded if LLM fails
+        fallback = {
+            "uk": (
+                "Вибачте, це питання виходить за межі підтримки Telekom. "
+                "Я можу допомогти з тарифами, рахунками, технічними проблемами, "
+                "питаннями щодо SIM-карт та роумінгу. Чим можу вам допомогти?"
+            ),
+            "en": (
+                "Sorry, that's outside my scope as a Telekom support agent. "
+                "I can help with tariffs, billing, SIM issues, technical problems, and roaming. "
+                "How can I assist you?"
+            ),
+        }
+        return {"messages": [AIMessage(content=fallback.get(lang, fallback["uk"]))]}
 
 
 # ---------------------------------------------------------------------------
@@ -154,7 +187,11 @@ def off_topic_node(state: SupportState, config: RunnableConfig) -> dict:  # noqa
 def route_from_router(
     state: SupportState,
 ) -> Literal["docs", "websearch", "escalation", "off_topic"]:
-    """Pick the next agent based on Router classification."""
+    """Pick the next agent based on Router classification.
+    
+    Ця функція — conditional edge в LangGraph: повертає назву ноди,
+    а граф переходить саме до неї.
+    """
     category = state.get("classification", {}).get("category", "general")
     return {"product": "docs", "general": "websearch", "critical": "escalation", "off_topic": "off_topic"}.get(
         category, "websearch"
@@ -191,9 +228,11 @@ def build_support_graph(session_id: str = "unknown", db_path: str | None = None)
     from agents.escalation_agent import build_escalation_agent  # lazy import
     _esc_agent = build_escalation_agent(session_id)
 
+    # Побудова escalation_node всередині build_support_graph —
+    # кожна сесія отримує власний екземпляр з session_id в систем-промпті.
+    # Inject db_session_id into configurable so send_escalation_email can
+    # read the authoritative session_id via InjectedToolArg — no globals needed.
     def escalation_node(state: SupportState, config: RunnableConfig) -> dict:
-        # Inject db_session_id into configurable so send_escalation_email can
-        # read the authoritative session_id via InjectedToolArg — no globals needed.
         db_session_id = state.get("session_id", "unknown")
         esc_config = {
             **config,
@@ -234,7 +273,11 @@ def build_support_graph(session_id: str = "unknown", db_path: str | None = None)
     builder.add_edge("escalation", END)
     builder.add_edge("off_topic", END)
 
-    # ── Choose checkpointer ──────────────────────────────────────────────────
+    # ── Вибір checkpointer ───────────────────────────────────────────────
+    # FastAPI: SqliteSaver — стан зберігається між рестартами сервера.
+    # REPL: InMemorySaver — стан живе лише в рамках одного сеансу.
+    # check_same_thread=False потрібно для asyncio — event loop і sqlite
+    # працюють в різних потоках.
     if db_path and _SQLITE_AVAILABLE:
         import sqlite3
         conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -243,3 +286,4 @@ def build_support_graph(session_id: str = "unknown", db_path: str | None = None)
         checkpointer = InMemorySaver()
 
     return builder.compile(checkpointer=checkpointer)
+
