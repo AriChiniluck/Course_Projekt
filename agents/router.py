@@ -56,6 +56,10 @@ IMPORTANT EDGE CASES:
 • "Всі номери заблоковані" → "critical", urgency "critical"
 • Weather / news / general knowledge / off-telecom topics → "off_topic"
 • "What else can you help with?" after a non-telecom topic → "off_topic"
+• Questions about connecting, configuring, or using the Telekom service
+  ("як підключити провайдера?", "як налаштувати інтернет?", "як увімкнути роумінг?",
+   "how to connect?", "how to set up?") → "general"
+  These are technical how-to questions about the operator's own services.
 • Questions about the bot's capabilities, what it can do, how it can help,
   requests to test it, or meta-questions about the support system → "product"
   Examples: "що ти вмієш?", "які твої можливості?", "хочу потестити тебе",
