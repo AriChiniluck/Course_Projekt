@@ -53,6 +53,15 @@ IMPORTANT EDGE CASES:
 • "Всі номери заблоковані" → "critical", urgency "critical"
 • Weather / news / general knowledge / off-telecom topics → "off_topic"
 • "What else can you help with?" after a non-telecom topic → "off_topic"
+• Questions about the bot's capabilities, what it can do, how it can help,
+  requests to test it, or meta-questions about the support system → "product"
+  Examples: "що ти вмієш?", "які твої можливості?", "хочу потестити тебе",
+  "чим ти можеш бути корисний?", "розкажи про себе", "what can you do?"
+• Questions about Telekom service CONCEPTS without personal context
+  (e.g. "Що таке кредитний ліміт?", "Що входить у тариф IoT 17?",
+   "Скільки коштує IoT 25?", "What is a credit limit?") → "product"
+  The Docs Agent will answer from the knowledge base and ask for credentials
+  only if needed to look up personal data.
 """
 
 
