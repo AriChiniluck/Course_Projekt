@@ -49,6 +49,9 @@ LANGUAGE: detect the customer's language and return a short ISO code
 IMPORTANT EDGE CASES:
 • Greeting + only a phone/account number → "product" (customer identification)
 • "Привіт / Hello" alone → "product" (will ask for credentials)
+• Closing / farewell messages ("ні, дякую", "все, дякую", "до побачення",
+  "дякую, все", "no thanks", "goodbye", "that's all") → "product"
+  (agent will say goodbye politely)
 • "Хочу змінити тариф" / "Перейти на інший план" → "critical" (sales escalation)
 • "Всі номери заблоковані" → "critical", urgency "critical"
 • Weather / news / general knowledge / off-telecom topics → "off_topic"
