@@ -38,13 +38,17 @@ _DATA_DIR = Path(__file__).resolve().parent / "data" / "customers"
 _TELEKOM_TARIFF_URL = settings.telekom_tariff_url
 
 # Column header name sets — lowercase, Ukrainian only
-_COL_ACCOUNT = {"особовий рахунок"}
-_COL_NAME    = {"назва клієнта", "найменування клієнта",
-                "назва підприємства", "найменування"}
-_COL_ID      = {"ідентифікатор", "єдрпоу", "код єдрпоу"}
-_COL_PHONE   = {"телефон", "номер телефону", "phone", "номер"}
-_COL_TARIFF  = {"тарифний план", "тариф", "назва тарифу"}
-_COL_TOTAL   = {"сума всього", "загальна сума", "разом", "сума"}
+_COL_ACCOUNT   = {"особовий рахунок"}
+_COL_NAME      = {"назва клієнта", "найменування клієнта",
+                  "назва підприємства", "найменування"}
+_COL_ID        = {"ідентифікатор", "єдрпоу", "код єдрпоу"}
+_COL_PHONE     = {"телефон", "номер телефону", "phone", "номер"}
+_COL_TARIFF    = {"тарифний план", "тариф", "назва тарифу"}
+_COL_TOTAL     = {"сума всього", "загальна сума", "разом", "сума"}
+
+# Keywords that identify the base subscription fee column — must be excluded from
+# paid_services (extra charges) and reported separately.
+_ABONPLATA_KW  = ("абонентська плата", "абонплата", "щомісячна плата")
 
 
 # ---------------------------------------------------------------------------
@@ -52,8 +56,11 @@ _COL_TOTAL   = {"сума всього", "загальна сума", "разо�
 # ---------------------------------------------------------------------------
 
 def _normalize_phone(raw: str) -> str:
-    """Return only digits, strip Ukrainian country code (+38 / 380)."""
+    """Повертає лише цифри, видаляє український префікс (+38 / 380).
+    IoT SIM-ідентифікатори 7-значні, не повні мобільні номери.
+    """
     digits = "".join(c for c in str(raw or "") if c.isdigit())
+    # Прибраємо префікс +380 або +38 щоб порівнювати суфікс-ідентифікатори без префіксу.
     if digits.startswith("380"):
         digits = digits[3:]
     elif digits.startswith("38") and len(digits) > 10:
@@ -108,8 +115,16 @@ def _vol_unit(base_lower: str) -> str:
     return ""  # unknown
 
 
+def _is_abonplata(name: str) -> bool:
+    """Return True if this service column header is the base subscription fee."""
+    n = name.lower()
+    return any(kw in n for kw in _ABONPLATA_KW)
+
+
 def _extract_services(row: tuple, headers: list[str], start_col: int = 6) -> dict[str, str]:
-    """Collect non-zero service cost columns as {service_name: 'X грн (detail)'}."""
+    """Collect non-zero service cost columns as {service_name: 'X грн (detail)'}.
+    Excludes the base subscription fee (абонентська плата) — returned separately.
+    """
     # Build index: service_base_name → {type: col_index}
     service_cols: dict[str, dict[str, int]] = {}
     for i in range(start_col, len(headers)):
@@ -132,6 +147,9 @@ def _extract_services(row: tuple, headers: list[str], start_col: int = 6) -> dic
     services: dict[str, str] = {}
     for base, cols in service_cols.items():
         if "sum" not in cols:
+            continue
+        # Skip абонентська плата — it is NOT an extra charge
+        if _is_abonplata(base):
             continue
         cost = _cell(row, cols["sum"])
         if not cost or cost in {"0", "0,0", "0.0", "None", ""}:
@@ -282,14 +300,23 @@ def _search_xlsx(path: Path, query: str) -> list[dict]:
             continue
         seen.add(key)
 
+        # Extract subscription fee separately from service columns
+        subscription_fee = ""
+        for i in range(_service_start, len(headers)):
+            h = headers[i]
+            if h and any(m in h for m in _SUM_MARKERS) and _is_abonplata(h.split("|")[0]):
+                subscription_fee = _cell(row, i)
+                break
+
         results.append({
-            "account_number": account,
-            "client_name":    name,
-            "identifier":     identifier,
-            "phone":          phone,
-            "tariff_name":    tariff,
-            "total_amount":   total,
-            "source_file":    path.name,
+            "account_number":   account,
+            "client_name":      name,
+            "identifier":       identifier,
+            "phone":            phone,
+            "tariff_name":      tariff,
+            "total_amount":     total,
+            "subscription_fee": subscription_fee,
+            "source_file":      path.name,
             "paid_services":    _extract_services(row, headers, start_col=_service_start),
             "included_usage":   _extract_included_usage(row, headers, start_col=_service_start),
         })
@@ -307,11 +334,13 @@ def search_customer(query: str) -> str:
     Returns matching records with: client name, account, tariff plan,
     total charges for the billing period, and a breakdown of paid services.
     """
+    # Мінімальна довжина ідентифікатора — захист від подачі одних
+    # цифр (напр. "0" або "1"), що не є реальним ідентифікатором.
     q = str(query or "").strip()
     if not q or len(q) < 3:
         return (
             "Запит занадто короткий. Вкажіть номер телефону, "
-            "особовий рахунок або ЄДРПОУ."
+            "особовий рахунок або ÄДРПОУ."
         )
 
     data_dir = _DATA_DIR
@@ -319,6 +348,7 @@ def search_customer(query: str) -> str:
         return f"Директорія з даними не знайдена: {data_dir}"
 
     all_results: list[dict] = []
+    # ~$ префікс — тимчасовий файл Excel (відкритий в редакторі), пропускаємо.
     for xlsx_path in sorted(data_dir.glob("*.xlsx")):
         if xlsx_path.name.startswith("~$"):
             continue
@@ -339,17 +369,18 @@ def search_customer(query: str) -> str:
             f"ЄДРПОУ:            {r['identifier']}",
             f"Телефон:           {r['phone']}",
             f"Тарифний план:     {r['tariff_name']}",
+            f"Абонентська плата: {r['subscription_fee']} грн" if r['subscription_fee'] else f"Загальна сума:     {r['total_amount']} грн",
             f"Загальна сума:     {r['total_amount']} грн",
             f"Файл даних:        {r['source_file']}",
         ]
         if r["paid_services"]:
-            lines.append("Нараховано понад тарифу (ненульові суми):")
+            lines.append("Позатарифні нарахування (понад абонплату):")
             for svc, amt in list(r["paid_services"].items())[:12]:
                 lines.append(f"  • {svc}: {amt}")
             if len(r["paid_services"]) > 12:
                 lines.append(f"  … ще {len(r['paid_services']) - 12} позицій")
         else:
-            lines.append("Позатарифні нарахування: відсутні")
+            lines.append("Позатарифні нарахування: ВІДСУТНІ (загальна сума = лише абонплата)")
         if r["included_usage"]:
             lines.append("Використання в межах тарифу (0 грн, входить в абонплату):")
             for svc, detail in list(r["included_usage"].items())[:12]:
